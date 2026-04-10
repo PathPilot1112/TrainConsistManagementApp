@@ -1,31 +1,28 @@
 package main;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.ArrayList;
 public class TrainConsistManagementApp {
 
-
-
         public static void main(String[] args) {
 
-            ArrayList<String> passengerBogies = new ArrayList<>();
+            // Step 1: Create a HashSet for Bogie IDs
+            Set<String> bogieIds = new HashSet<>();
 
-            passengerBogies.add("Sleeper");
-            passengerBogies.add("AC Chair");
-            passengerBogies.add("First Class");
+            // Step 2: Add bogie IDs (including duplicates)
+            bogieIds.add("BG101");
+            bogieIds.add("BG102");
+            bogieIds.add("BG103");
+            bogieIds.add("BG101"); // Duplicate
+            bogieIds.add("BG104");
+            bogieIds.add("BG102"); // Duplicate
 
-            System.out.println("Passenger Bogies after addition:");
-            System.out.println(passengerBogies);
-
-            passengerBogies.remove("AC Chair");
-
-            System.out.println("\nPassenger Bogies after removal:");
-            System.out.println(passengerBogies);
-
-            boolean exists = passengerBogies.contains("Sleeper");
-
-            System.out.println("\nDoes Sleeper bogie exist? " + exists);
-
-            System.out.println("\nFinal Passenger Bogies List:");
-            System.out.println(passengerBogies);
+            // Step 3: Display unique bogie IDs
+            System.out.println("Unique Bogie IDs in Train Consist:");
+            for (String id : bogieIds) {
+                System.out.println(id);
+            }
         }
+
 
 }
