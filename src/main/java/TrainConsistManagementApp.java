@@ -1,8 +1,8 @@
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class TrainConsistManagementApp {
 
-    // Existing Bogie (for passengers)
     public static class Bogie {
         public String name;
         public int capacity;
@@ -13,36 +13,53 @@ public class TrainConsistManagementApp {
         }
     }
 
-    // ✅ NEW: Goods Bogie class
-    public static class GoodsBogie {
-        public String type;   // Cylindrical, Open, Box
-        public String cargo;  // Petroleum, Coal, Grain
-
-        public GoodsBogie(String type, String cargo) {
-            this.type = type;
-            this.cargo = cargo;
+    // ✅ Loop-based filtering
+    public static List<Bogie> filterWithLoop(List<Bogie> bogies) {
+        List<Bogie> result = new ArrayList<>();
+        for (Bogie b : bogies) {
+            if (b.capacity > 60) {
+                result.add(b);
+            }
         }
+        return result;
     }
 
-    // ✅ UC12: Safety validation
-    public static boolean isTrainSafe(List<GoodsBogie> bogies) {
-
+    // ✅ Stream-based filtering
+    public static List<Bogie> filterWithStream(List<Bogie> bogies) {
         return bogies.stream()
-                .allMatch(b ->
-                        !b.type.equals("Cylindrical") ||
-                                b.cargo.equals("Petroleum")
-                );
+                .filter(b -> b.capacity > 60)
+                .collect(Collectors.toList());
+    }
+
+    // ✅ Measure execution time
+    public static long measureLoopTime(List<Bogie> bogies) {
+        long start = System.nanoTime();
+        filterWithLoop(bogies);
+        long end = System.nanoTime();
+        return end - start;
+    }
+
+    public static long measureStreamTime(List<Bogie> bogies) {
+        long start = System.nanoTime();
+        filterWithStream(bogies);
+        long end = System.nanoTime();
+        return end - start;
     }
 
     // Demo
     public static void main(String[] args) {
 
-        List<GoodsBogie> list = new ArrayList<>();
-        list.add(new GoodsBogie("Cylindrical", "Petroleum"));
-        list.add(new GoodsBogie("Open", "Coal"));
+        List<Bogie> bogies = new ArrayList<>();
 
-        boolean safe = isTrainSafe(list);
+        // create large dataset
+        for (int i = 0; i < 10000; i++) {
+            bogies.add(new Bogie("Sleeper", i % 100));
+        }
 
-        System.out.println("Train Safety: " + safe);
+        long loopTime = measureLoopTime(bogies);
+        long streamTime = measureStreamTime(bogies);
+
+        System.out.println("Loop Time (ns): " + loopTime);
+        System.out.println("Stream Time (ns): " + streamTime);
     }
 }
