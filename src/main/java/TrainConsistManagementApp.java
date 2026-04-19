@@ -1,7 +1,8 @@
-import java.util.regex.Pattern;
+import java.util.*;
 
 public class TrainConsistManagementApp {
 
+    // Existing Bogie (for passengers)
     public static class Bogie {
         public String name;
         public int capacity;
@@ -12,25 +13,36 @@ public class TrainConsistManagementApp {
         }
     }
 
-    // ✅ Train ID validation: TRN-1234
-    public static boolean isValidTrainId(String trainId) {
-        String regex = "TRN-\\d{4}";
-        return Pattern.matches(regex, trainId);
+    // ✅ NEW: Goods Bogie class
+    public static class GoodsBogie {
+        public String type;   // Cylindrical, Open, Box
+        public String cargo;  // Petroleum, Coal, Grain
+
+        public GoodsBogie(String type, String cargo) {
+            this.type = type;
+            this.cargo = cargo;
+        }
     }
 
-    // ✅ Cargo Code validation: PET-AB
-    public static boolean isValidCargoCode(String cargoCode) {
-        String regex = "PET-[A-Z]{2}";
-        return Pattern.matches(regex, cargoCode);
+    // ✅ UC12: Safety validation
+    public static boolean isTrainSafe(List<GoodsBogie> bogies) {
+
+        return bogies.stream()
+                .allMatch(b ->
+                        !b.type.equals("Cylindrical") ||
+                                b.cargo.equals("Petroleum")
+                );
     }
 
     // Demo
     public static void main(String[] args) {
 
-        String trainId = "TRN-1234";
-        String cargoCode = "PET-AB";
+        List<GoodsBogie> list = new ArrayList<>();
+        list.add(new GoodsBogie("Cylindrical", "Petroleum"));
+        list.add(new GoodsBogie("Open", "Coal"));
 
-        System.out.println("Train ID valid: " + isValidTrainId(trainId));
-        System.out.println("Cargo Code valid: " + isValidCargoCode(cargoCode));
+        boolean safe = isTrainSafe(list);
+
+        System.out.println("Train Safety: " + safe);
     }
 }
