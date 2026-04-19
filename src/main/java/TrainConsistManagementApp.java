@@ -2,53 +2,37 @@ import java.util.*;
 
 public class TrainConsistManagementApp {
 
+    // ✅ UC16: Bubble Sort
+    public static void bubbleSort(int[] arr) {
 
-    public static class CargoSafetyException extends RuntimeException {
-        public CargoSafetyException(String message) {
-            super(message);
-        }
-    }
+        int n = arr.length;
 
+        for (int i = 0; i < n - 1; i++) {
 
-    public static class GoodsBogie {
-        public String type;   // Cylindrical / Rectangular
-        public String cargo;  // Petroleum / Coal / etc.
+            for (int j = 0; j < n - i - 1; j++) {
 
-        public GoodsBogie(String type) {
-            this.type = type;
-        }
-    }
+                if (arr[j] > arr[j + 1]) {
 
-
-    public static void assignCargo(GoodsBogie bogie, String cargo) {
-
-        try {
-
-            if (bogie.type.equals("Rectangular") && cargo.equals("Petroleum")) {
-                throw new CargoSafetyException("Unsafe: Petroleum cannot be assigned to Rectangular bogie");
+                    // 🔄 swap
+                    int temp = arr[j];
+                    arr[j] = arr[j + 1];
+                    arr[j + 1] = temp;
+                }
             }
-
-
-            bogie.cargo = cargo;
-            System.out.println("Cargo assigned successfully");
-
-        } catch (CargoSafetyException e) {
-            System.out.println("Error: " + e.getMessage());
-
-        } finally {
-            System.out.println("Assignment attempt completed");
         }
     }
 
     // Demo
     public static void main(String[] args) {
 
-        GoodsBogie b1 = new GoodsBogie("Cylindrical");
-        GoodsBogie b2 = new GoodsBogie("Rectangular");
+        int[] capacities = {72, 56, 24, 70, 60};
 
-        assignCargo(b1, "Petroleum");
-        assignCargo(b2, "Petroleum");
+        bubbleSort(capacities);
 
-        System.out.println("Program continues...");
+        System.out.println("Sorted Capacities:");
+
+        for (int c : capacities) {
+            System.out.print(c + " ");
+        }
     }
 }
