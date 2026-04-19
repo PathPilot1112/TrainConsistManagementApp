@@ -3,37 +3,52 @@ import java.util.*;
 public class TrainConsistManagementApp {
 
 
-    public static class InvalidCapacityException extends Exception {
-        public InvalidCapacityException(String message) {
+    public static class CargoSafetyException extends RuntimeException {
+        public CargoSafetyException(String message) {
             super(message);
         }
     }
 
 
-    public static class Bogie {
-        public String name;
-        public int capacity;
+    public static class GoodsBogie {
+        public String type;   // Cylindrical / Rectangular
+        public String cargo;  // Petroleum / Coal / etc.
 
-        public Bogie(String name, int capacity) throws InvalidCapacityException {
+        public GoodsBogie(String type) {
+            this.type = type;
+        }
+    }
 
-            if (capacity <= 0) {
-                throw new InvalidCapacityException("Capacity must be greater than zero");
+
+    public static void assignCargo(GoodsBogie bogie, String cargo) {
+
+        try {
+
+            if (bogie.type.equals("Rectangular") && cargo.equals("Petroleum")) {
+                throw new CargoSafetyException("Unsafe: Petroleum cannot be assigned to Rectangular bogie");
             }
 
-            this.name = name;
-            this.capacity = capacity;
+
+            bogie.cargo = cargo;
+            System.out.println("Cargo assigned successfully");
+
+        } catch (CargoSafetyException e) {
+            System.out.println("Error: " + e.getMessage());
+
+        } finally {
+            System.out.println("Assignment attempt completed");
         }
     }
 
     // Demo
     public static void main(String[] args) {
 
-        try {
-            Bogie b1 = new Bogie("Sleeper", 72);
-            Bogie b2 = new Bogie("AC Chair", -10);
+        GoodsBogie b1 = new GoodsBogie("Cylindrical");
+        GoodsBogie b2 = new GoodsBogie("Rectangular");
 
-        } catch (InvalidCapacityException e) {
-            System.out.println("Error: " + e.getMessage());
-        }
+        assignCargo(b1, "Petroleum");
+        assignCargo(b2, "Petroleum");
+
+        System.out.println("Program continues...");
     }
 }
