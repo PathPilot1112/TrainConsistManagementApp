@@ -11,32 +11,25 @@ public class TrainConsistManagementApp {
             this.name = name;
             this.capacity = capacity;
         }
-
-        @Override
-        public String toString() {
-            return name + " (" + capacity + ")";
-        }
     }
 
-    // ✅ UC9: Group by bogie name/type
-    public static Map<String, List<Bogie>> groupByType(List<Bogie> bogies) {
+    // ✅ UC10: Total capacity using reduce
+    public static int getTotalCapacity(List<Bogie> bogies) {
         return bogies.stream()
-                .collect(Collectors.groupingBy(b -> b.name));
+                .map(b -> b.capacity)        // extract capacity
+                .reduce(0, Integer::sum);   // sum all values
     }
 
-    // optional main for demo
+    // demo main
     public static void main(String[] args) {
 
         List<Bogie> bogies = new ArrayList<>();
         bogies.add(new Bogie("Sleeper", 72));
-        bogies.add(new Bogie("Sleeper", 70));
         bogies.add(new Bogie("AC Chair", 56));
         bogies.add(new Bogie("First Class", 24));
 
-        Map<String, List<Bogie>> grouped = groupByType(bogies);
+        int total = getTotalCapacity(bogies);
 
-        grouped.forEach((type, list) -> {
-            System.out.println(type + " → " + list);
-        });
+        System.out.println("Total Capacity: " + total);
     }
 }
