@@ -1,43 +1,34 @@
-import java.util.Arrays;
-
 public class TrainConsistManagementApp {
 
-    // ✅ UC19: Binary Search
-    public static boolean binarySearchBogie(String[] bogieIds, String key) {
+    // ✅ UC20: Safe search with validation
+    public static boolean safeSearchBogie(String[] bogieIds, String key) {
 
-        // 🔥 IMPORTANT: ensure sorted
-        Arrays.sort(bogieIds);
+        // 🚨 FAIL-FAST CHECK
+        if (bogieIds == null || bogieIds.length == 0) {
+            throw new IllegalStateException("Cannot perform search: No bogies available");
+        }
 
-        int low = 0;
-        int high = bogieIds.length - 1;
-
-        while (low <= high) {
-
-            int mid = (low + high) / 2;
-
-            int compare = bogieIds[mid].compareTo(key);
-
-            if (compare == 0) {
-                return true; // ✅ found
-            } else if (compare < 0) {
-                low = mid + 1; // search right
-            } else {
-                high = mid - 1; // search left
+        // 🔍 Normal search (linear)
+        for (String id : bogieIds) {
+            if (id.equals(key)) {
+                return true;
             }
         }
 
-        return false; // ❌ not found
+        return false;
     }
 
     // Demo
     public static void main(String[] args) {
 
-        String[] bogies = {"BG309","BG101","BG550","BG205","BG412"};
+        String[] bogies = {}; // empty case
 
-        String key = "BG205";
+        try {
+            boolean found = safeSearchBogie(bogies, "BG101");
+            System.out.println(found ? "Found" : "Not Found");
 
-        boolean found = binarySearchBogie(bogies, key);
-
-        System.out.println(found ? "Bogie Found" : "Bogie Not Found");
+        } catch (IllegalStateException e) {
+            System.out.println("Error: " + e.getMessage());
+        }
     }
 }
