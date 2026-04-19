@@ -1,5 +1,4 @@
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.regex.Pattern;
 
 public class TrainConsistManagementApp {
 
@@ -13,23 +12,25 @@ public class TrainConsistManagementApp {
         }
     }
 
-    // ✅ UC10: Total capacity using reduce
-    public static int getTotalCapacity(List<Bogie> bogies) {
-        return bogies.stream()
-                .map(b -> b.capacity)        // extract capacity
-                .reduce(0, Integer::sum);   // sum all values
+    // ✅ Train ID validation: TRN-1234
+    public static boolean isValidTrainId(String trainId) {
+        String regex = "TRN-\\d{4}";
+        return Pattern.matches(regex, trainId);
     }
 
-    // demo main
+    // ✅ Cargo Code validation: PET-AB
+    public static boolean isValidCargoCode(String cargoCode) {
+        String regex = "PET-[A-Z]{2}";
+        return Pattern.matches(regex, cargoCode);
+    }
+
+    // Demo
     public static void main(String[] args) {
 
-        List<Bogie> bogies = new ArrayList<>();
-        bogies.add(new Bogie("Sleeper", 72));
-        bogies.add(new Bogie("AC Chair", 56));
-        bogies.add(new Bogie("First Class", 24));
+        String trainId = "TRN-1234";
+        String cargoCode = "PET-AB";
 
-        int total = getTotalCapacity(bogies);
-
-        System.out.println("Total Capacity: " + total);
+        System.out.println("Train ID valid: " + isValidTrainId(trainId));
+        System.out.println("Cargo Code valid: " + isValidCargoCode(cargoCode));
     }
 }
